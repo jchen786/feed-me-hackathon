@@ -1,0 +1,57 @@
+{
+  "tools": [
+    {
+      "name": "feed_me",
+      "description": "Trigger the FEED ME agent to analyze the user's context and return exactly one meal recommendation. Call this when the user says they are hungry or wants food.",
+      "parameters": {},
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/feed",
+        "body": {
+          "intent": "hungry",
+          "userId": "demo",
+          "source": "openclaw"
+        }
+      }
+    },
+    {
+      "name": "confirm_purchase",
+      "description": "Execute the meal purchase through the commerce layer after the user confirms the recommendation.",
+      "parameters": {
+        "decisionId": {
+          "type": "string",
+          "description": "The decisionId returned by feed_me()"
+        }
+      },
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/purchase",
+        "body": {
+          "decisionId": "{{decisionId}}"
+        }
+      }
+    },
+    {
+      "name": "submit_feedback",
+      "description": "Record user feedback (like or dislike) for the meal decision.",
+      "parameters": {
+        "decisionId": {
+          "type": "string",
+          "description": "The decisionId from feed_me()"
+        },
+        "feedback": {
+          "type": "string",
+          "enum": ["like", "dislike"]
+        }
+      },
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/feedback",
+        "body": {
+          "decisionId": "{{decisionId}}",
+          "feedback": "{{feedback}}"
+        }
+      }
+    }
+  ]
+}
