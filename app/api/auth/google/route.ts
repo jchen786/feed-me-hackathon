@@ -9,13 +9,12 @@ import {
  * Redirects the browser to Google's OAuth consent screen.
  */
 export async function GET(req: NextRequest) {
+  const origin = req.nextUrl.origin;
   if (!isGoogleOAuthConfigured()) {
-    return NextResponse.json(
-      {
-        error:
-          "Google OAuth is not configured. Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env.local.",
-      },
-      { status: 503 }
+    // No credentials yet: bounce back to the UI with a clear, friendly hint
+    // instead of a raw JSON error page.
+    return NextResponse.redirect(
+      `${origin}/?calendar=error&reason=unconfigured`
     );
   }
   const userId = req.nextUrl.searchParams.get("userId") ?? "demo";

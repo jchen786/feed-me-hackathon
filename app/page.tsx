@@ -56,12 +56,20 @@ export default function Home() {
   const [calendar, setCalendar] = useState<
     "disconnected" | "connected" | "error"
   >("disconnected");
+  const [calendarError, setCalendarError] = useState<string | null>(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const callbackState = params.get("calendar");
     if (callbackState === "connected") setCalendar("connected");
-    if (callbackState === "error") setCalendar("error");
+    if (callbackState === "error") {
+      setCalendar("error");
+      setCalendarError(
+        params.get("reason") === "unconfigured"
+          ? "Google Calendar isn't configured yet. Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to .env.local, then restart the server."
+          : "Calendar connection failed \u2014 using demo schedule."
+      );
+    }
 
     fetch("/api/calendar/status?userId=demo")
       .then((res) => res.json())
@@ -181,7 +189,8 @@ export default function Home() {
               )}
               {calendar === "error" && (
                 <p className="text-xs text-red-400">
-                  Calendar connection failed &#8212; using demo schedule.
+                  {calendarError ??
+                    "Calendar connection failed \u2014 using demo schedule."}
                 </p>
               )}
             </div>
