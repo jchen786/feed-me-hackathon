@@ -14,10 +14,11 @@ No search. No comparison. No decision fatigue.
 
 | Module | Status | Details |
 |--------|--------|---------|
-| Decision Engine | ✅ Done | timeLogic, decisionRules, rankMeals (5-dimension scoring), 24 tests passing |
+| Decision Engine | ✅ Done | timeLogic, decisionRules, rankMeals (5-dimension scoring), 34 tests passing |
 | Web UI | ✅ Done | 4 screens (Home, Working, Decision, Complete) + Agent Trace visualization |
 | API Endpoints | ✅ Done | `/api/feed`, `/api/purchase`, `/api/feedback` with auth (`x-api-secret` header) |
 | Snaplii Integration | ✅ Done | Real Uber Eats gift card purchase via Snaplii REST API (isMock: false) |
+| Google Calendar | ✅ Code done | OAuth flow (`/api/auth/google`), `lib/calendarAdapter.ts`, UI connect button; mock fallback until `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` are configured |
 | Public Deployment | ✅ Done | localtunnel: `https://mean-chairs-post.loca.lt` |
 | OpenClaw Docs | ✅ Done | `openclaw/OPENCLAW_SETUP.md` + `tool-definition.json` |
 | Product Manual | ✅ Done | `docs/product-manual.md` — full user journey, architecture, demo script, FAQ |
@@ -26,7 +27,7 @@ No search. No comparison. No decision fatigue.
 
 | Module | Priority | Effort | Owner |
 |--------|----------|--------|-------|
-| Google Calendar OAuth | P0 | 2-3h | Person B |
+| Google Calendar OAuth — awaiting Google Cloud credentials | P0 | remaining: ~15min config | Person B |
 | User address collection UI | P0 | 30min | Person B |
 | Browser automation (Uber Eats order) | P1 | 3-4h | Person B |
 | User registration/login | P1 | 2h | Person B |
@@ -139,17 +140,17 @@ npm test
 
 **Priority 1: Google Calendar OAuth (P0, 2-3h)**
 - [ ] Create Google Cloud project + OAuth 2.0 credentials
-- [ ] Implement OAuth flow in Next.js (`/api/auth/google`)
-- [ ] Create Calendar adapter (`lib/calendarAdapter.ts`)
+- [x] Implement OAuth flow in Next.js (`/api/auth/google`)
+- [x] Create Calendar adapter (`lib/calendarAdapter.ts`)
   ```typescript
   interface CalendarAdapter {
     getNextEvent(userId: string): Promise<{ title: string; start: string } | null>;
   }
   ```
-- [ ] Real implementation: Google Calendar API
-- [ ] Mock fallback: `DEMO_USER_CONTEXT` (already exists)
-- [ ] Replace hardcoded demo data with real calendar when authenticated
-- [ ] Add "Connect Google Calendar" button to Web UI
+- [x] Real implementation: Google Calendar API
+- [x] Mock fallback: `DEMO_USER_CONTEXT` (already exists)
+- [x] Replace hardcoded demo data with real calendar when authenticated
+- [x] Add "Connect Google Calendar" button to Web UI
 
 **Priority 2: User Address Collection (P0, 30min)**
 - [ ] Add address input to onboarding flow
