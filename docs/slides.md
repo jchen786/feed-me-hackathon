@@ -1,100 +1,111 @@
-# FEED ME — Hackathon Slides
+# FEED ME — Final Slides (3 pages)
+
+> One slide = one screen. Speaker notes are the lines starting with 🗣.
+> TODO before submission: fill team names on Slide 1 and the final URL on Slide 3.
 
 ---
 
-## SLIDE 1: TEAM
+## SLIDE 1 — TEAM
 
 **FEED ME**
-
 *One tap. Your agent figures out what you should eat — and makes it happen.*
 
----
+| | |
+|---|---|
+| **[Person A name]** | Decision engine, QA, presentation — [1-line background] |
+| **[Person B name]** | Integrations, UI, deployment — [1-line background] |
 
-[Team names / photos]
+Built in 24h at **Beta Hackathon — Agent Factory** (Qoder × Beta Fund).
 
-[Brief 1-line background each]
+🗣 *"We built FEED ME with one belief: the best food app is the one that
+never asks you a question. One sentence in, one meal out."*
 
-Built at: Beta Hackathon — Agent Factory (Qoder × Beta Fund)
-
----
-
-## SLIDE 2: PRODUCT
-
-### The Problem
-
-Every food app makes you make every decision:
-Which restaurant? Which dish? Pickup or delivery? How much to spend? Do I have time?
-
-### The Insight
-
-These decisions aren't hard — they're *friction*.
-The user already knows everything the agent needs to know.
-
-### Feed Me
-
-The user states one thing:
-
-> **I'm hungry.**
-
-The agent handles everything else.
+🗣 Split: one person built the brain (deterministic decision engine, 34
+tests), the other wired it to the real world (calendar, Snaplii payments, UI).
 
 ---
 
-**How it works:**
+## SLIDE 2 — PRODUCT
+
+### Problem
+Every food app makes YOU do the work:
+search → filter → compare → decide → pay.
+Five decisions before you eat.
+
+### Insight
+Those decisions aren't hard — they're *friction*.
+Everything needed to make them already exists:
+your **time**, your **calendar**, your **budget**, your **taste**.
+
+### Solution
+The user says one thing:
+
+> **"I'm hungry."**
+
+The agent returns **ONE meal** — the only one that fits — and buys it.
+
+### Architecture
 
 ```
-User: "I'm hungry"
-         ↓
-Agent reads: current time + calendar + location + budget + preferences
-         ↓
-Agent decides: what fits, what you'll like, what you can afford, pickup or delivery
-         ↓
-ONE recommendation. One tap to confirm.
-         ↓
-Snaplii executes the transaction.
+"I'm hungry"
+   ↓
+Context Layer     time · Google Calendar · budget · preferences
+   ↓
+Decision Engine   5-dimension score (deterministic, no LLM)
+                  Timing 35% · Preference 25% · Budget 20%
+                  Distance 10% · Feedback 10%
+   ↓
+ONE decision      "Chicken Teriyaki Bowl — pickup, 11 min,
+                   34-min buffer before your 2pm meeting"
+   ↓
+Commerce Layer    Snaplii executes payment
+   ↓
+Feedback          👍/👎 trains the next decision
 ```
 
-**Why this is an agent, not an app:**
+### Why an agent, not an app
+App: User → Search → Filter → Compare → Decide → Pay
+Agent: **User states → Agent reasons → Agent acts**
 
-Traditional apps: User → Search → Filter → Compare → Decide → Pay
+FEED ME = decision + orchestration layer · Snaplii = commerce rail
 
-Feed Me: User states → Agent reasons → Agent acts
+🗣 *"We deliberately return ONE recommendation, not a list. A list is
+someone else's unfinished decision. We finish it."*
 
-**Snaplii's role:**
-
-Feed Me = Decision + Orchestration layer
-Snaplii = Commerce execution rail
+🗣 *"The core decision engine is deterministic and unit-tested — an LLM
+could sit on top as the interface, but the judgment is auditable code."*
 
 ---
 
-**Future:**
+## SLIDE 3 — DEMO
+
+### Live demo (60–90s)
+
+1. Open the app — one button: **I'M HUNGRY**
+2. Agent trace: checks calendar → calculates 45 free minutes → scores meals
+3. ONE answer: Chicken Teriyaki Bowl, $14.80, pickup in 11 min, with *why*
+4. Tap **CONFIRM** → Snaplii purchase completes on screen
+5. 👍 — feedback feeds the next decision
+
+**Live URL:** `https://mean-chairs-post.loca.lt` _(update to Vercel URL once deployed)_
+
+**Tech stack**
+- Next.js + TypeScript — frontend + API
+- Deterministic decision engine (34 tests)
+- Google Calendar via OAuth (mock fallback keeps the demo bulletproof)
+- Snaplii REST API — real purchase rail
+- OpenClaw tool integration — "I'm hungry" also works from chat
+
+🗣 Backup lines if the live demo misbehaves: screenshots/video are in
+`docs/demo-script.md`; the web button is the fallback path, and every
+integration degrades to mock, so the flow never dead-ends.
+
+### The pattern we're betting on
 
 > "I'm hungry." → "I'm bored." → "I'm late." → "I have two hours free."
 
-The pattern: **Human State → Agent → Real-world action.**
-Food is the first vertical because the outcome is immediate, understandable, and transactional.
+**Human state → Agent → Real-world action.**
+Food first, because the outcome is immediate, understandable, transactional.
 
----
-
-## SLIDE 3: DEMO
-
-**Live demo — 60 seconds**
-
-Golden path:
-1. Tap **I'M HUNGRY**
-2. Agent checks calendar, calculates time, selects meal
-3. One recommendation appears
-4. User confirms → Snaplii executes
-5. 👍 feedback
-
----
-
-**Tech stack:**
-
-- Next.js + TypeScript (frontend + API)
-- Deterministic decision engine (no LLM dependency for core logic)
-- CalendarAdapter (real / mock fallback)
-- CommerceAdapter via Snaplii
-- Qoder Agent Mode for development
-
-**Live URL:** [insert before submission]
+🗣 Close: *"FEED ME is the smallest complete version of that pattern:
+one human sentence, one real transaction. Thank you."*
