@@ -4,9 +4,12 @@ import { chooseMeal } from "@/src/feed/rankMeals";
 import { candidateMeals } from "@/src/feed/candidateMeals";
 import { saveDecision } from "@/lib/decisionStore";
 import { DEMO_MODE, DEMO_USER_CONTEXT } from "@/lib/demoConfig";
+import { checkAuth, unauthorizedResponse } from "@/lib/auth";
 import type { UserContext } from "@/src/feed/types";
 
 export async function POST(req: NextRequest) {
+  if (!checkAuth(req)) return unauthorizedResponse();
+  
   try {
     const body = await req.json().catch(() => ({}));
     const source: string = body.source ?? "web";

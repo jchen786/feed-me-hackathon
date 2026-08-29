@@ -68,7 +68,7 @@ export default function Home() {
     try {
       const res = await fetch("/api/feed", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "x-api-secret": "feedme-hackathon-2026-secret" },
         body: JSON.stringify({ intent: "hungry", userId: "demo", source: "web" }),
       });
       const data: FeedResponse = await res.json();
@@ -93,7 +93,7 @@ export default function Home() {
     try {
       const res = await fetch("/api/purchase", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "x-api-secret": "feedme-hackathon-2026-secret" },
         body: JSON.stringify({ decisionId: feedData.decisionId }),
       });
       const data: PurchaseResponse = await res.json();
@@ -119,7 +119,7 @@ export default function Home() {
     setFeedbackSent(true);
     fetch("/api/feedback", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "x-api-secret": "feedme-hackathon-2026-secret" },
       body: JSON.stringify({ decisionId: feedData.decisionId, feedback: fb }),
     }).catch(() => {});
   }, [feedData, feedbackSent]);
